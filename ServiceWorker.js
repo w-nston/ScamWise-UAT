@@ -1,9 +1,9 @@
 const cacheName = "DefaultCompany-ScamWise-0.1";
 const contentToCache = [
-    "Build/ScamWiseSquad.loader.js",
-    "Build/ScamWiseSquad.framework.js.unityweb",
-    "Build/ScamWiseSquad.data.unityweb",
-    "Build/ScamWiseSquad.wasm.unityweb",
+    "Build/ScamWise-UAT.loader.js",
+    "Build/ScamWise-UAT.framework.js.unityweb",
+    "Build/ScamWise-UAT.data.unityweb",
+    "Build/ScamWise-UAT.wasm.unityweb",
     "TemplateData/style.css"
 
 ];
