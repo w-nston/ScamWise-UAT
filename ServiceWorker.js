@@ -1,4 +1,4 @@
-const cacheName = "DefaultCompany-ScamWise-0.1";
+const cacheName = "Bamboo Builders-ScamWise Squad-0.1";
 const contentToCache = [
     "Build/ScamWise-UAT.loader.js",
     "Build/ScamWise-UAT.framework.js.unityweb",

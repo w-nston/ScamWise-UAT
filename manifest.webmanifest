@@ -1,11 +1,11 @@
 {
-    "name": "ScamWise",
-    "short_name": "ScamWise",
+    "name": "ScamWise Squad",
+    "short_name": "ScamWise Squad",
     "start_url": "index.html",
     "display": "fullscreen",
     "background_color": "#161616",
     "theme_color": "#000",
-    "description": "ScamWise",
+    "description": "ScamWise Squad",
     "icons": [{
       "src": "TemplateData/icons/unity-logo-dark.png",
       "sizes": "144x144",
