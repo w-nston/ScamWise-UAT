@@ -1,9 +1,9 @@
-const cacheName = "Bamboo Builders-ScamWise Squad-0.1";
+const cacheName = "Finute-ScamWise Squad-0.01";
 const contentToCache = [
-    "Build/ScamWise Demo.loader.js",
-    "Build/ScamWise Demo.framework.js.unityweb",
-    "Build/ScamWise Demo.data.unityweb",
-    "Build/ScamWise Demo.wasm.unityweb",
+    "Build/ScamWiseSquad.loader.js",
+    "Build/ScamWiseSquad.framework.js.unityweb",
+    "Build/ScamWiseSquad.data.unityweb",
+    "Build/ScamWiseSquad.wasm.unityweb",
     "TemplateData/style.css"
 
 ];
