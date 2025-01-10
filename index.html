@@ -3,7 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>ScamWise Squad</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+    <title>ScamWise Squad Demo</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
     <link rel="manifest" href="manifest.webmanifest">
@@ -191,6 +194,60 @@ function isSafari() {
           loadUnityGame();
         }
       }
+
+      function isWebGL2Supported() {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(window.WebGL2RenderingContext && canvas.getContext('webgl2'));
+  } catch (e) {
+    return false;
+  }
+}
+
+function checkWebGL2Support() {
+  if (!isWebGL2Supported()) {
+    // Create an overlay for the unsupported prompt
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+    overlay.style.color = 'white';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+    overlay.style.zIndex = '9999';
+    overlay.innerHTML = `
+      <h1>Unsupported Browser</h1>
+      <p>Your browser does not support WebGL2, which is required to run this application.</p>
+      <p>Please update your browser or switch to a browser that supports WebGL2 (e.g., Chrome, Firefox, or Edge).</p>
+    `;
+
+    // Add a button to close the prompt
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.style.marginTop = '20px';
+    closeButton.style.padding = '10px 20px';
+    closeButton.style.backgroundColor = '#ff4c4c';
+    closeButton.style.color = 'white';
+    closeButton.style.border = 'none';
+    closeButton.style.borderRadius = '5px';
+    closeButton.style.cursor = 'pointer';
+
+    closeButton.addEventListener('click', () => {
+      overlay.style.display = 'none';
+    });
+
+    overlay.appendChild(closeButton);
+    document.body.appendChild(overlay);
+  }
+}
+
+// Run the check on page load
+window.addEventListener('load', checkWebGL2Support);
 
       function loadUnityGame() {
         var container = document.querySelector("#unity-container");
