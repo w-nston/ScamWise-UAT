@@ -66,6 +66,94 @@
     </div>
 
     <script>
+        let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent the mini-infobar from appearing on mobile
+  e.preventDefault();
+  // Stash the event so it can be triggered later
+  deferredPrompt = e;
+
+  // Show a custom install banner or button
+  const installBanner = document.createElement('div');
+  installBanner.id = 'install-banner';
+  installBanner.style.position = 'fixed';
+  installBanner.style.bottom = '20px';
+  installBanner.style.left = '50%';
+  installBanner.style.transform = 'translateX(-50%)';
+  installBanner.style.backgroundColor = '#fff';
+  installBanner.style.padding = '10px 20px';
+  installBanner.style.boxShadow = '0 2px 10px rgba(0,0,0,0.5)';
+  installBanner.style.borderRadius = '5px';
+  installBanner.style.display = 'flex';
+  installBanner.style.alignItems = 'center';
+  installBanner.style.zIndex = '1000';
+
+  installBanner.innerHTML = `
+    <p style="margin: 0; padding-right: 10px;">Add ScamWise Squad to your Home Screen!</p>
+    <button id="install-button" style="padding: 5px 10px; background: #007bff; color: #fff; border: none; border-radius: 5px;">Install</button>
+  `;
+  document.body.appendChild(installBanner);
+
+  const installButton = document.getElementById('install-button');
+  installButton.addEventListener('click', async () => {
+    // Show the prompt
+    deferredPrompt.prompt();
+    // Wait for the user's response
+    const choiceResult = await deferredPrompt.userChoice;
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    } else {
+      console.log('User dismissed the install prompt');
+    }
+    // Remove the banner
+    document.body.removeChild(installBanner);
+    deferredPrompt = null;
+  });
+});
+
+// Optionally, handle the appinstalled event
+window.addEventListener('appinstalled', () => {
+  console.log('PWA installed');
+});
+
+function isSafari() {
+    const ua = navigator.userAgent;
+    return /iPhone|iPad|iPod/i.test(ua) && /Safari/i.test(ua) && !/Chrome/i.test(ua);
+  }
+
+  window.addEventListener('load', () => {
+    if (isSafari()) {
+      // Show custom instructions for Safari users
+      const safariBanner = document.createElement('div');
+      safariBanner.id = 'safari-banner';
+      safariBanner.style.position = 'fixed';
+      safariBanner.style.bottom = '20px';
+      safariBanner.style.left = '50%';
+      safariBanner.style.transform = 'translateX(-50%)';
+      safariBanner.style.backgroundColor = '#fff';
+      safariBanner.style.padding = '10px 20px';
+      safariBanner.style.boxShadow = '0 2px 10px rgba(0,0,0,0.5)';
+      safariBanner.style.borderRadius = '5px';
+      safariBanner.style.display = 'flex';
+      safariBanner.style.alignItems = 'center';
+      safariBanner.style.zIndex = '1000';
+
+      safariBanner.innerHTML = `
+        <p style="margin: 0; padding-right: 10px;">
+          Tap <img src="Share.png" alt="Share" style="height: 20px; vertical-align: middle;"> and select "Add to Home Screen" to install ScamWise Squad!
+        </p>
+        <button id="close-safari-banner" style="padding: 5px 10px; background: #007bff; color: #fff; border: none; border-radius: 5px;">Close</button>
+      `;
+      document.body.appendChild(safariBanner);
+
+      const closeButton = document.getElementById('close-safari-banner');
+      closeButton.addEventListener('click', () => {
+        document.body.removeChild(safariBanner);
+      });
+    }
+  });
+
       function detectDevice() {
         const blackOverlay = document.getElementById('black-overlay');
         const overlayImg = document.getElementById('black-overlay-img');
