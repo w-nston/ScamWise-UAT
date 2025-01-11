@@ -1,9 +1,9 @@
 const cacheName = "Finute-ScamWise Squad-0.01";
 const contentToCache = [
     "Build/ScamWiseSquad.loader.js",
-    "Build/ScamWiseSquad.framework.js.unityweb",
-    "Build/ScamWiseSquad.data.unityweb",
-    "Build/ScamWiseSquad.wasm.unityweb",
+    "Build/ScamWiseSquad.framework.js",
+    "Build/ScamWiseSquad.data",
+    "Build/ScamWiseSquad.wasm",
     "TemplateData/style.css"
 
 ];
