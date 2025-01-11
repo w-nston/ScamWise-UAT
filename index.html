@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>ScamWise Squad Demo</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
@@ -53,25 +53,21 @@
   </head>
   <body>
     <div id="unity-container">
-      <canvas id="unity-canvas" width="1920" height="1080" tabindex="-1"></canvas>
+      <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
           <div id="unity-progress-bar-full"></div>
         </div>
       </div>
-      <div id="unity-warning"></div>
+      <div id="unity-warning"> </div>
     </div>
-
-    <!-- Black overlay for warnings -->
     <div id="black-overlay">
-      <img id="black-overlay-img" src="" alt="">
+      <img id="black-overlay-img" src="" alt="Device warning">
     </div>
-
+    
     <script>
-        let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
+      window.addEventListener('beforeinstallprompt', (e) => {
   // Prevent the mini-infobar from appearing on mobile
   e.preventDefault();
   // Stash the event so it can be triggered later
@@ -157,52 +153,46 @@ function isSafari() {
     }
   });
 
-      function detectDevice() {
-        const blackOverlay = document.getElementById('black-overlay');
-        const overlayImg = document.getElementById('black-overlay-img');
+  function detectDevice() {
+  const blackOverlay = document.getElementById('black-overlay');
+  const overlayImg = document.getElementById('black-overlay-img');
 
-        // Check if the user is on a mobile device
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  // Check if the user is on a mobile device
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        if (!isMobile) {
-          // Show PC warning overlay
-          overlayImg.src = 'UseMobileDevice.png';
-          overlayImg.alt = 'Please use a mobile device';
-          blackOverlay.style.display = 'block';
-          return; // Do not load the game
-        } else {
-          // Check orientation if the user is on a mobile device
-          function checkOrientation() {
-            if (window.innerHeight > window.innerWidth) {
-              // Show Rotate warning if in portrait mode
-              overlayImg.src = 'RotateDevice.png';
-              overlayImg.alt = 'Please rotate your device to landscape';
-              blackOverlay.style.display = 'block';
-            } else {
-              // Hide Rotate warning if in landscape mode
-              blackOverlay.style.display = 'none';
-            }
-          }
-
-          // Initial check
-          checkOrientation();
-
-          // Add an event listener for orientation changes
-          window.addEventListener('resize', checkOrientation);
-
-          // Proceed to load the game since it's a mobile device
-          loadUnityGame();
-        }
+  if (!isMobile) {
+    // Show PC warning overlay
+    overlayImg.src = 'UseMobileDevice.png'; // Ensure this path is correct
+    overlayImg.alt = 'Please use a mobile device';
+    blackOverlay.style.display = 'block';
+  } else {
+    // Check orientation if the user is on a mobile device
+    function checkOrientation() {
+      if (window.innerHeight > window.innerWidth) {
+        // Show Rotate warning if in portrait mode
+        overlayImg.src = 'RotateDevice.png'; // Ensure this path is correct
+        overlayImg.alt = 'Please rotate your device to landscape';
+        blackOverlay.style.display = 'block';
+      } else {
+        // Hide the overlay when in landscape mode
+        blackOverlay.style.display = 'none';
       }
+    }
 
-      function isWebGL2Supported() {
-  try {
-    const canvas = document.createElement('canvas');
-    return !!(window.WebGL2RenderingContext && canvas.getContext('webgl2'));
-  } catch (e) {
-    return false;
+    // Initial orientation check
+    checkOrientation();
+
+    // Add an event listener for orientation changes
+    window.addEventListener('resize', checkOrientation);
+
+    // Load the Unity game since it's on a mobile device
+    loadUnityGame();
   }
 }
+
+// Call detectDevice on page load
+window.addEventListener('load', detectDevice);
+
 
 function checkWebGL2Support() {
   if (!isWebGL2Supported()) {
@@ -245,73 +235,85 @@ function checkWebGL2Support() {
     document.body.appendChild(overlay);
   }
 }
-
-// Run the check on page load
-window.addEventListener('load', checkWebGL2Support);
-
-      function loadUnityGame() {
-        var container = document.querySelector("#unity-container");
-        var canvas = document.querySelector("#unity-canvas");
-        var loadingBar = document.querySelector("#unity-loading-bar");
-        var progressBarFull = document.querySelector("#unity-progress-bar-full");
-        var warningBanner = document.querySelector("#unity-warning");
-
-        function unityShowBanner(msg, type) {
-          function updateBannerVisibility() {
-            warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-          }
-          var div = document.createElement('div');
-          div.innerHTML = msg;
-          warningBanner.appendChild(div);
-          if (type == 'error') div.style = 'background: red; padding: 10px;';
-          else {
-            if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-            setTimeout(function() {
-              warningBanner.removeChild(div);
-              updateBannerVisibility();
-            }, 5000);
-          }
-          updateBannerVisibility();
+      window.addEventListener("load", function () {
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("ServiceWorker.js");
         }
+      });
 
-        var buildUrl = "Build";
-        var loaderUrl = buildUrl + "/ScamWiseSquad.loader.js";
-        var config = {
-          arguments: [],
-          dataUrl: buildUrl + "/ScamWiseSquad.data.unityweb",
-          frameworkUrl: buildUrl + "/ScamWiseSquad.framework.js.unityweb",
-          codeUrl: buildUrl + "/ScamWiseSquad.wasm.unityweb",
-          streamingAssetsUrl: "StreamingAssets",
-          companyName: "Finute",
-          productName: "ScamWise Squad",
-          productVersion: "0.01",
-          showBanner: unityShowBanner,
-        };
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var warningBanner = document.querySelector("#unity-warning");
 
-        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-          var meta = document.createElement('meta');
-          meta.name = 'viewport';
-          meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-          document.getElementsByTagName('head')[0].appendChild(meta);
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
         }
-
-        loadingBar.style.display = "block";
-
-        var script = document.createElement("script");
-        script.src = loaderUrl;
-        script.onload = () => {
-          createUnityInstance(canvas, config, (progress) => {
-            progressBarFull.style.width = 100 * progress + "%";
-          }).then((unityInstance) => {
-            loadingBar.style.display = "none";
-          }).catch((message) => {
-            alert(message);
-          });
-        };
-        document.body.appendChild(script);
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
       }
 
-      window.addEventListener('load', detectDevice);
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/ScamWiseSquad.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/ScamWiseSquad.data.unityweb",
+        frameworkUrl: buildUrl + "/ScamWiseSquad.framework.js.unityweb",
+        codeUrl: buildUrl + "/ScamWiseSquad.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Finute",
+        productName: "ScamWise Squad",
+        productVersion: "0.01",
+        showBanner: unityShowBanner,
+      };
+
+      // By default Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+      }
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          loadingBar.style.display = "none";
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
     </script>
   </body>
 </html>
